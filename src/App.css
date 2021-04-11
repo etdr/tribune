@@ -1,0 +1,97 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&family=Merriweather:ital,wght@0,400;0,700;1,400;1,700&family=UnifrakturMaguntia&display=swap');
+
+
+.App {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: [topline] 10rem [headline] 6rem [contentline] auto [footline] 8rem [bottomline];
+  grid-template-columns: [leftline] auto [colstartline] 50rem [colendline] auto [rightline];
+  grid-template-areas: 
+    "   .    header  . "
+    "   .     info   . "
+    "sidebox tribune . "
+    "   .    footer  . ";
+}
+
+
+
+
+#maintitle {
+  grid-area: header;
+  place-self: end center;
+  margin: 0;
+
+  font-family: 'UnifrakturMaguntia', serif;
+  font-size: 5rem;
+}
+
+#edition {
+  flex: 0 1 auto;
+  font-family: 'UnifrakturMaguntia', serif;
+
+}
+
+#date {
+  flex: 0 1 auto;
+}
+
+#info {
+  grid-area: info;
+  margin: 0 2rem 0;
+  display: flex;
+  width: 40rem;
+  place-self: start center;
+}
+
+#info-spacer {
+  flex: 1 1 auto;
+}
+
+main {
+  grid-area: tribune;
+}
+
+/* SECTIONS */
+
+section {
+  margin: 0 auto 10rem;
+}
+
+section h2 {
+  font-size: 3rem;
+  border-bottom: solid 2px darkgray;
+}
+
+
+/* ARTICLES */
+
+article {
+  margin: 0 auto 5rem;
+}
+
+.article-header {
+  display: flex;
+}
+
+.article-header h3 {
+  font-size: 6rem;
+  margin: 0 2rem 0 0;
+}
+
+.instructor-info {
+  margin: 1rem 0;
+}
+
+.instructor-info h4 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: normal;
+}
+
+
+article p {
+  font-size: 1.6rem;
+  text-align: justify;
+  text-justify: auto;
+}
