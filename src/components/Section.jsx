@@ -6,9 +6,9 @@ export default function Section ({sec}) {
 
 
   return (
-    <section id={`${sec.sid}-section`}>
+    <section id={`${sec.code}-section`}>
       <h2>{sec.name}</h2>
-      {sec.articles.map(art => <Article art={art} />)}
+      {sec.articles.map((art, i) => <Article art={art} key={i} />)}
     </section>
   )
 }

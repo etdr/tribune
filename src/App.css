@@ -5,14 +5,34 @@
 .App {
   min-height: 100vh;
   display: grid;
-  grid-template-rows: [topline] 10rem [headline] 6rem [contentline] auto [footline] 8rem [bottomline];
-  grid-template-columns: [leftline] auto [colstartline] 50rem [colendline] auto [rightline];
+  grid-template-rows: [topline] 10rem [headline] 9rem [contentline] auto [footline] 8rem [bottomline];
+  grid-template-columns: [leftline] auto [colstartline] 70rem [colendline] auto [rightline];
   grid-template-areas: 
     "   .    header  . "
     "   .     info   . "
     "sidebox tribune . "
     "   .    footer  . ";
 }
+
+
+
+button {
+  background-color: white;
+  border: 3px solid black;
+  border-radius: 6px;
+  transition: all 0.2s linear;
+}
+
+button:hover {
+  background-color: lightgray;
+}
+
+
+.in-tribune {
+  grid-area: tribune;
+}
+
+
 
 
 
@@ -23,7 +43,7 @@
   margin: 0;
 
   font-family: 'UnifrakturMaguntia', serif;
-  font-size: 5rem;
+  font-size: 7rem;
 }
 
 #edition {
@@ -38,18 +58,51 @@
 
 #info {
   grid-area: info;
-  margin: 0 2rem 0;
   display: flex;
-  width: 40rem;
+  flex-direction: column;
+  justify-content: space-between;
   place-self: start center;
 }
 
-#info-spacer {
+#info-line1 {
+  flex: 0 1 auto;
+  margin: 0 2rem 0;
+  display: flex;
+  width: 60rem;
+}
+
+.info-spacer {
   flex: 1 1 auto;
 }
 
+#info-line2 {
+  flex: 0 1 auto;
+}
+
+#info-line2 h2 {
+  font-size: 3rem;
+  text-align: center;
+  margin: 0;
+}
+
+
+
+
+
+
+
+
+/* MAIN STUFF */
+
+
 main {
   grid-area: tribune;
+}
+
+.centercenter {
+  place-self: center center;
+  height: 220px;
+  width: 220px;
 }
 
 /* SECTIONS */
@@ -61,6 +114,10 @@ section {
 section h2 {
   font-size: 3rem;
   border-bottom: solid 2px darkgray;
+}
+
+section:first-child, section:last-child {
+  margin: 0;
 }
 
 
@@ -95,3 +152,158 @@ article p {
   text-align: justify;
   text-justify: auto;
 }
+
+
+/* FOOTER */
+
+footer {
+  grid-area: footer;
+  place-self: center start;
+}
+
+footer h4 {
+  font-size: 1.4rem;
+  margin: 0;
+}
+
+footer h5 {
+  font-size: 1rem;
+  margin: 0;
+}
+
+
+
+
+
+/* ADMIN */
+
+#maintitle a {
+  text-decoration: none;
+  color: black;
+}
+
+/* POSTER */
+
+.horizontal-ul {
+  display: flex;
+  width: 100%;
+  padding-inline-start: 0;
+  list-style-type: none;
+  justify-content: space-evenly;
+  align-content: center;
+}
+
+.gray-underline {
+  padding-bottom: 1rem;
+  border-bottom: solid 2px darkgray;
+}
+
+
+
+
+.poster {
+  min-height: 80%;
+  display: grid;
+  grid-template-rows: [p-topline] 4rem [p-headline] 4rem 4rem 4rem 4rem 4rem auto [p-baseline] 4rem [p-bottomline];
+  grid-template-columns: [p-leftline] 25% [p-centerline] auto [p-rightline];
+  grid-template-areas:
+    "title ."
+    "field1 input1"
+    "field2 input2"
+    "field3 input3"
+    "field4 input4"
+    "field5 input5"
+    "field6 input6"
+    "field7 input7";
+  column-gap: 10px;
+  row-gap: 12px;
+}
+
+.poster h3 {
+  font-size: 2rem;
+  place-self: center right;
+}
+
+.poster-field {
+  place-self: top right;
+  margin-top: .6rem;
+}
+
+.p-field1 { grid-area: field1; }
+.p-input1 { grid-area: input1; }
+.p-field2 { grid-area: field2; }
+.p-input2 { grid-area: input2; }
+.p-field3 { grid-area: field3; }
+.p-input3 { grid-area: input3; }
+.p-field4 { grid-area: field4; }
+.p-input4 { grid-area: input4; }
+.p-field5 { grid-area: field5; }
+.p-input5 { grid-area: input5; }
+.p-field6 { grid-area: field6; }
+.p-input6 { grid-area: input6; }
+.p-field7 { grid-area: field7; }
+.p-input7 { grid-area: input7; }
+
+.poster-field p {
+  margin: 0;
+  text-align: right;
+}
+
+.p-field-title {
+  font-size: 1.4rem;
+}
+
+.p-field-subtitle {
+  font-style: italic;
+  color: #555555;
+}
+
+.poster-input {
+  font-size: 1.8rem;
+  font-family: 'Lato', sans-serif;
+  width: auto;
+}
+
+.submit-button {
+  width: 20rem;
+  font-size: 2rem;
+}
+
+
+/* SPECIFIC POSTERS */
+
+/*     POST */
+
+.p-post-content {
+  grid-area: input5 / input5 / input6 / input6;
+}
+
+.p-post-submitter {
+  grid-area: input7;
+  place-self: center right;
+}
+
+
+
+/*     INDIVIDUAL */
+
+.p-individual-submitter {
+  grid-area: input5;
+  place-self: start right;
+}
+
+
+
+
+
+
+
+
+
+
+/* AUTH */
+
+#auth-form {
+  grid-area: tribune;
+}
+

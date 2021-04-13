@@ -3,15 +3,27 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import './App.css'
 
 import Tribune from './components/Tribune'
+import Footer from './components/Footer'
+import Admin from './components/admin/Admin'
+import Auth from './components/auth/Auth'
 
-function App() {
+function App () {
+
+  const [token, setToken] = useState('')
+  const [email, setEmail] = useState('')
+  const [admin, setAdmin] = useState(false)
 
   const [tribune, setTribune] = useState({
-    vol: 1,
-    iss: 1,
+    volume: 1,
+    issue: 1,
     date: '2021-04-10',
+    title: 'Inaugural Edition',
+    intro: 'Enjoy reading this! We poured so much effort into it and really think it could benefit you. But don\'t take *my* word for it...',
+    outro: 'peace dog',
+
     content: {
       wd: {
+        code: 'wd',
         name: 'Web Development',
         articles: [
           {
@@ -41,14 +53,17 @@ function App() {
         ]
       },
       sd: {
+        code: 'sd',
         name: 'Software Development',
         articles: []
       },
       cy: {
+        code: 'cy',
         name: 'Cybersecurity',
         articles: []
       },
       ux: {
+        code: 'ux',
         name: 'UX/UI',
         articles: []
       }
@@ -57,26 +72,52 @@ function App() {
 
   useEffect(() => {
     // fetch latest tribune
-  })
+  }, [])
+
+  useEffect(() => {
+    const localToken = localStorage.getItem('token')
+    if (localToken) {
+      setEmail(localStorage.getItem('email'))
+      setAdmin(localStorage.getItem('role') === 'admin')
+      setToken(localToken)
+    }
+  }, [])
 
   return (
     <div className="App">
-      <h1 id="maintitle">Learning Team Tribune</h1>
-      <div id="info">
-        <h2 id="edition">Volume {tribune?.vol}, Issue {tribune?.iss}</h2>
-        <div id="info-spacer"></div>
-        <h2 id="date">{tribune?.date}</h2>
-      </div>
       <BrowserRouter>
+      
+      
+      
 
         <Switch>
           <Route path="/admin">
-            <Route path="/post"></Route>
-            <Route path="/manage"></Route>
+            <Admin email={email} admin={admin} token={token} />
           </Route>
-          <Route path="/"><Tribune content={tribune?.content} /></Route>
+          <Route path="/auth">
+            <Auth token={token} setToken={setToken} setEmail={setEmail} setAdmin={setAdmin} />
+          </Route>
+          <Route path="/">
+            <h1 id="maintitle">Learning Team Tribune</h1>
+            <div id="info">
+              <div id="info-line1">
+              <h2 id="edition">Volume {tribune?.volume}, Issue {tribune?.issue}</h2>
+              <div className="info-spacer"></div>
+                <h2 id="date">{tribune?.date}</h2>
+              </div>
+              <div className="info-spacer"></div>
+              <div id="info-line2">
+                {tribune.title ? <h2 id="title">{tribune?.title}</h2> : null}
+              </div>
+            </div>
+            <Tribune content={tribune.content} intro={tribune.intro} outro={tribune.outro} />
+          </Route>
         </Switch>
+
+        <Footer />
       </BrowserRouter>
+
+      
     </div>
   )
 }
