@@ -13,66 +13,54 @@ function App () {
   const [email, setEmail] = useState('')
   const [admin, setAdmin] = useState(false)
 
-  const [tribune, setTribune] = useState({
-    volume: 1,
-    issue: 1,
-    date: '2021-04-10',
-    title: 'Inaugural Edition',
-    intro: 'Enjoy reading this! We poured so much effort into it and really think it could benefit you. But don\'t take *my* word for it...',
-    outro: 'peace dog',
+  const [tribune, setTribune] = useState({})
 
-    content: {
-      wd: {
-        code: 'wd',
-        name: 'Web Development',
-        articles: [
-          {
-            cohort: {
-              name: "70B",
-              instructors: "Eli T. Drumm",
-              las: "Summer Kerkeres, Hustin Jeffers, Shane Cox, Cris Matson & Tristan Oshier"
-            },
-            content: "This past week was project week, the moment when all the hard work of the badge comes together. Seeing the classes projects turn out, all deployed to the internet and working is the highlight. Every class feels like a journey and we get to celebrate making it two thirds of the way through the program. It is times like this that make Teaching worth it."
-          },
-          {
-            cohort: {
-              name: "70A",
-              instructors: "Rob Vanarsdall",
-              las: "Amruta Kanvinde, Marco Lopez, Nav Loveday, Ellie Hong & Kayla Bullard"
-            },
-            content: "This past week was project week, the moment when all the hard work of the badge comes together. Seeing the classes projects turn out, all deployed to the internet and working is the highlight. Every class feels like a journey and we get to celebrate making it two thirds of the way through the program. It is times like this that make Teaching worth it."
-          },
-          {
-            cohort: {
-              name: "75",
-              instructors: "Zach Maynard & Tayor Dickens",
-              las: "Xzavier Dunn, Adam Clouse, Britany Magee"
-            },
-            content: "This past week was project week, the moment when all the hard work of the badge comes together. Seeing the classes projects turn out, all deployed to the internet and working is the highlight. Every class feels like a journey and we get to celebrate making it two thirds of the way through the program. It is times like this that make Teaching worth it."
-          }
-        ]
-      },
-      sd: {
-        code: 'sd',
-        name: 'Software Development',
-        articles: []
-      },
-      cy: {
-        code: 'cy',
-        name: 'Cybersecurity',
-        articles: []
-      },
-      ux: {
-        code: 'ux',
-        name: 'UX/UI',
-        articles: []
+  function processRawTribune (rt) {
+    return {
+      id: rt.id,
+      volume: rt.volume,
+      issue: rt.issue,
+      date: new Date(rt.date),
+      title: rt.title,
+      intro: rt.intro,
+      outro: rt.outro,
+
+      programs: {
+        wd: {
+          code: 'wd',
+          name: 'Web Development',
+          posts: rt.posts.filter(p => p.cohort.program === 'wd')
+        },
+        sd: {
+          code: 'sd',
+          name: 'Software Development',
+          posts: rt.posts.filter(p => p.cohort.program === 'sd')
+        },
+        cy: {
+          code: 'cy',
+          name: 'Cybersecurity',
+          posts: rt.posts.filter(p => p.cohort.program === 'cy')
+        },
+        ux: {
+          code: 'ux',
+          name: 'UX/UI',
+          posts: rt.posts.filter(p => p.cohort.program === 'ux')
+        }
       }
     }
-  })
+  }
 
-  useEffect(() => {
-    // fetch latest tribune
-  }, [])
+  async function fetchLatestTribune (localToken) {
+    const result = await (await fetch('http://localhost:3110/t/newest', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${localToken}`
+      }
+    })).json()
+    // setRawTribune(result)
+    setTribune(processRawTribune(result))
+  }
+
 
   useEffect(() => {
     const localToken = localStorage.getItem('token')
@@ -80,8 +68,11 @@ function App () {
       setEmail(localStorage.getItem('email'))
       setAdmin(localStorage.getItem('role') === 'admin')
       setToken(localToken)
+      fetchLatestTribune(localToken)
     }
   }, [])
+
+  
 
   return (
     <div className="App">
@@ -103,14 +94,14 @@ function App () {
               <div id="info-line1">
               <h2 id="edition">Volume {tribune?.volume}, Issue {tribune?.issue}</h2>
               <div className="info-spacer"></div>
-                <h2 id="date">{tribune?.date}</h2>
+                <h2 id="date">{tribune?.date?.toISOString()}</h2>
               </div>
               <div className="info-spacer"></div>
               <div id="info-line2">
                 {tribune.title ? <h2 id="title">{tribune?.title}</h2> : null}
               </div>
             </div>
-            <Tribune content={tribune.content} intro={tribune.intro} outro={tribune.outro} />
+            <Tribune programs={tribune.programs} intro={tribune.intro} outro={tribune.outro} />
           </Route>
         </Switch>
 

@@ -292,6 +292,13 @@ footer h5 {
   place-self: start right;
 }
 
+/*     COHORT */
+
+.p-cohort-submitter {
+  grid-area: input4;
+  place-self: start right;
+}
+
 
 
 

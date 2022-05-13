@@ -7,7 +7,7 @@ export default function IndividualPoster (props) {
 
   const [firstname, setFirstname] = useState('')
   const [lastname, setLastname] = useState('')
-  const [rid, setRid] = useState(0)
+  const [rid, setRid] = useState(null)
   const [cid, setCid] = useState(null)
   
   async function fetchRanks () {
@@ -18,7 +18,9 @@ export default function IndividualPoster (props) {
       }
     })).json()
     setRanks(result)
-    setRid(0)
+    for (const r of result) {
+      if (r.rank === 0) setRid(r.id)
+    }
   }
 
   async function fetchActiveCohorts () {
@@ -42,21 +44,26 @@ export default function IndividualPoster (props) {
   async function onSubmit (event) {
     event.preventDefault()
 
+    const body = JSON.stringify({
+      individual: {
+        firstname,
+        lastname
+      },
+      cohortId: cid,
+      rankId: rid
+    })
+
     const result = await (await fetch('http://localhost:3110/i', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${props.token}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        individual: {
-          firstname,
-          lastname,
-          cohortId: cid,
-          rankId: rid
-        }
-      })
+      body
     })).json()
+
+    setFirstname('')
+    setLastname('')
   }
 
   return (
@@ -85,8 +92,12 @@ export default function IndividualPoster (props) {
         <p className="p-field-title">Rank</p>
         <p className="p-field-subtitle">i.e., their official title</p>
       </div>
-      <select className="poster-input p-input3">
-        {ranks.map(r => <option value={r.id} key={r.id}>{r.title}</option>)}
+      <select
+        className="poster-input p-input3"
+        value={rid?.toString()}
+        onChange={e => setRid(parseInt(e.target.value))}>
+        {ranks.sort((r0, r1) => r0.rank - r1.rank)
+              .map(r => <option value={r.id} key={r.rank}>{r.title}</option>)}
       </select>
 
       <div className="poster-field p-field4">
@@ -95,8 +106,12 @@ export default function IndividualPoster (props) {
       </div>
       <select
         className="poster-input p-input4"
-        value={null}
-        onChange={e => setCid(e.target.value)}>
+        value={cid?.toString() || null}
+        onChange={e => {
+          const parsed = parseInt(e.target.value)
+          if (isNaN(parsed)) setCid(null)
+          else setCid(parsed)
+        }}>
         <option value={null}>null assignment</option>
         {cohorts.map(c => <option value={c.id} key={c.id}>{`${c.program.toUpperCase()} ${c.name}`}</option>)}
       </select>

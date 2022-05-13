@@ -4,6 +4,7 @@ import { Switch, Route, Link } from 'react-router-dom'
 import PostPoster from './PostPoster'
 import TribunePoster from './TribunePoster'
 import IndividualPoster from './IndividualPoster'
+import CohortPoster from './CohortPoster'
 
 export default function Poster (props) {
 
@@ -27,6 +28,9 @@ export default function Poster (props) {
         </Route>
         <Route path="/admin/poster/i">
           <IndividualPoster token={props.token} />
+        </Route>
+        <Route path="/admin/poster/c">
+          <CohortPoster token={props.token} />
         </Route>
       </Switch>
     </main>
